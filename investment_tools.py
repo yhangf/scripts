@@ -73,10 +73,12 @@ def portfolio_income_calculator(total_amount, *, code_list, ratio_list,
         total_principal += float(founds_income_info[3].replace(",", ""))
         total_assets += float(founds_income_info[-2].replace(",", ""))
     rate_of_return = (total_assets - total_principal) / total_principal
-    return founds_income_list, rate_of_return
+    return founds_income_list, total_principal, rate_of_return
   
-def prety_print(founds_income_list, rate_of_return):
-    founds_income_list.append([""] * 5 + ["投资组合总收益率为", f"{rate_of_return:.2%}"])
+def prety_print(founds_income_list, total_principal, rate_of_return):
+    founds_income_list.append([""] * 2 +
+                              ["投资组合投入总金额为", f"{total_principal:.2f}"] + 
+                              ["", "投资组合总收益率为", f"{rate_of_return:.2%}"])
     df = pd.DataFrame(founds_income_list, columns=["基金代码", "基金全称", "定投总期数",
                                                    "投入总本金(元)", "分红方式", "期末总资产(元)", "定投收益率"])
     d = dict(selector="th", props=[('text-align', 'center')])
@@ -87,16 +89,17 @@ def prety_print(founds_income_list, rate_of_return):
 
 
 """使用
-founds_income_list, rate_of_return = portfolio_income_calculator(total_amount=2000, 
-                                                                 code_list=["510300", "512260", "515650",
-                                                                            "513050", "512170"],
-                                                                 ratio_list=[0.25, 0.2, 0.2, 0.2, 0.15],
-                                                                 round_=1,
-                                                                 sdate="2018-01-01", 
-                                                                 edate="2021-04-01", 
-                                                                 dtr=5, 
-                                                                 p=0.01, 
-                                                                 stype=1,
-                                                                 needfirst=2)
-prety_print(founds_income_list, rate_of_return)
+return_data = portfolio_income_calculator(total_amount=2000, 
+                                          code_list=["510300", "512260", "515650",
+                                                     "513050", "512170"],
+                                          ratio_list=[0.25, 0.2, 0.2, 0.2, 0.15],
+                                          round_=1,
+                                          sdate="2018-01-01", 
+                                          edate="2021-04-01", 
+                                          dtr=5, 
+                                          p=0.01, 
+                                          stype=1,
+                                          needfirst=2)
+founds_income_list, total_principal, rate_of_return = return_data
+prety_print(founds_income_list, total_principal, rate_of_return)
 """
